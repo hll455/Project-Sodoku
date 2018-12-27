@@ -14,6 +14,8 @@ using namespace std;
 int sum = 0;
 int findans = 0;//是否找到最终解
 
+char print[300000000];//存入写入文件的数独，一起写入
+int p=0;//类似于指针
 char save[12][25];
 int visit[3][10][10] = { 0 };//记录是否填写
 
@@ -50,16 +52,21 @@ void createsodoku(int n)
 					{
 						for (int h = 0; h < 9; h++)
 						{
-							fputc(num[(h + shift[m]) % 9], create_outputfile);
-
-							if (h!=8)
-							fputc(' ', create_outputfile);
+							print[p++] = num[(h + shift[m]) % 9];
+							if (h != 8)
+								print[p++] = ' ';
+							//fputc(num[(h + shift[m]) % 9], create_outputfile);
+							
+							/*if (h!=8)
+							fputc(' ', create_outputfile);*/
 						}
-						fputc('\n', create_outputfile);
+						print[p++] = '\n';
+						//fputc('\n', create_outputfile);
 						
 					}
 					n--;
-					fputc('\n', create_outputfile);
+					print[p++] = '\n';
+					//fputc('\n', create_outputfile);
 				
 					sum++;
 
@@ -68,7 +75,8 @@ void createsodoku(int n)
 			}
 		}
 	}
-
+	fputs(print, create_outputfile);
+	fclose(create_outputfile);
 }
 
 
@@ -140,89 +148,98 @@ int main(int argc,char*argv[])
 	start = clock();
 	time = finish - start;*/
 	//int opt = getopt(argc, argv, "c:s:");
-	int aa;
-	scanf("%d", &aa);
-	if (aa==1)
+
+	if (strcmp(argv[1], "-c") == 0) 
 	{
-		int n;
-		scanf("%d", &n);
-		/*n = atoi(argv[2]);*/
+		int n = atoi(argv[2]);
 		createsodoku(n);
+		
 		printf("\n%d\n", sum);
-
+		
 	}
-	else if (aa==2) {
-
-
+	else if (strcmp(argv[1], "-s") == 0)
+	{
+		
 		FILE *fp2 = fopen("question.txt", "r");
-
-	memset(save, 0, sizeof(save));
-	
-
-	char temp[25];
-	
-	int num = 0;
-	//int i = 0;
-	while (!feof(fp2)) {
-	fgets(temp, 22, fp2);
-	if (strcmp(temp, "\n") == 0)
-		continue;
-	strcat(save[num], temp);
-	num++;
-	if (num == 9) {
-		num = 0;
+		memset(save, 0, sizeof(save));
 		
 
-		for (int i=0; i<9 ;i++)
-		printf("%s", save[i]);
-		//save数组已经装下一个数独，开始求解
+		char temp[25];
 		
-		printf("\n");
-		memset(visit, 0, sizeof(visit));
-		/*初始化visit
-		行列宫都从[109]*/
-		//注意 每一行一个数字过后紧跟着空格 换算至没有空格时候的visit数组
-		findans = 0;
-		for (int i = 0; i < 9; i++)
-			for(int j = 0; j < 17; j++)
-		{
-				if (save[i][j] != '0'&& save[i][j]!=' ') 
-				{
-					visit[0][i / 3 * 3 + j / 6][save[i][j]-'0'] = 1;
-					visit[1][i][save[i][j] - '0'] = 1;
-					visit[2][j / 2][save[i][j] - '0'] = 1;
-				}
+		int num = 0;
+		//int i = 0;
+		while (!feof(fp2)) {
+		fgets(temp, 22, fp2);
+		if (strcmp(temp, "\n") == 0)
+			continue;
+		strcat(save[num], temp);
+		num++;
+		if (num == 9) {
+			num = 0;
+			
+
+			for (int i=0; i<9 ;i++)
+			printf("%s", save[i]);
+			//save数组已经装下一个数独，开始求解
+			
+			printf("\n");
+			memset(visit, 0, sizeof(visit));
+			/*初始化visit
+			行列宫都从[109]*/
+			//注意 每一行一个数字过后紧跟着空格 换算至没有空格时候的visit数组
+			findans = 0;
+			for (int i = 0; i < 9; i++)
+				for(int j = 0; j < 17; j++)
+			{
+					if (save[i][j] != '0'&& save[i][j]!=' ') 
+					{
+						visit[0][i / 3 * 3 + j / 6][save[i][j]-'0'] = 1;
+						visit[1][i][save[i][j] - '0'] = 1;
+						visit[2][j / 2][save[i][j] - '0'] = 1;
+					}
+			}
+
+			solvesodoku(0, 0);
+
+			for (int i = 0; i<9; i++)
+				printf("%s", save[i]);
+
+			printf("\n");
+			memset(save, 0, sizeof(save));
+			memset(visit, 0, sizeof(visit));
+		}
+		
+
 		}
 
-		solvesodoku(0, 0);
-
-		for (int i = 0; i<9; i++)
-			printf("%s", save[i]);
-
-		printf("\n");
-		memset(save, 0, sizeof(save));
-		memset(visit, 0, sizeof(visit));
-	}
-	
-
-	}
-
-
 
 
 	}
-	/*int n;
-	scanf("%d", &n);
-	createsodoku(n);
-	printf("\n%d\n", sum);*/
 
-	//FILE *fp2 = fopen("123.txt", "r");
+
+	//int aa;
+	//scanf("%d", &aa);
+	//if (aa==1)
+	//{
+	//	int n;
+	//	scanf("%d", &n);
+	//	/*n = atoi(argv[2]);*/
+	//	createsodoku(n);
+	//	printf("\n%d\n", sum);
+
+	//}
+	//else if (aa==2) {
+
+
+	//	FILE *fp2 = fopen("question.txt", "r");
+
 	//memset(save, 0, sizeof(save));
+	//
 
 	//char temp[25];
 	//
 	//int num = 0;
-	//int i = 0;
+	////int i = 0;
 	//while (!feof(fp2)) {
 	//fgets(temp, 22, fp2);
 	//if (strcmp(temp, "\n") == 0)
@@ -237,14 +254,16 @@ int main(int argc,char*argv[])
 	//	printf("%s", save[i]);
 	//	//save数组已经装下一个数独，开始求解
 	//	
-
+	//	printf("\n");
+	//	memset(visit, 0, sizeof(visit));
 	//	/*初始化visit
 	//	行列宫都从[109]*/
 	//	//注意 每一行一个数字过后紧跟着空格 换算至没有空格时候的visit数组
+	//	findans = 0;
 	//	for (int i = 0; i < 9; i++)
 	//		for(int j = 0; j < 17; j++)
 	//	{
-	//			if (save[i][j] != '0') 
+	//			if (save[i][j] != '0'&& save[i][j]!=' ') 
 	//			{
 	//				visit[0][i / 3 * 3 + j / 6][save[i][j]-'0'] = 1;
 	//				visit[1][i][save[i][j] - '0'] = 1;
@@ -254,33 +273,25 @@ int main(int argc,char*argv[])
 
 	//	solvesodoku(0, 0);
 
+	//	for (int i = 0; i<9; i++)
+	//		printf("%s", save[i]);
 
+	//	printf("\n");
 	//	memset(save, 0, sizeof(save));
+	//	memset(visit, 0, sizeof(visit));
 	//}
 	//
 
 	//}
-	
-	
-	/*FILE *fp2 = fopen("123.txt", "r");
-	char save[10][10];
-	memset(save, 0, sizeof(save));
-	while (!feof(fp2))
-	{
-		for (int i=0; i<9; i++)
-			for (int j = 0; j < 9; j++)
-			{
-				fscanf(fp2, "%c", &save[i][j]);
-			}
-		
-		for (int i = 0; i<9; i++)
-			for (int j = 0; j < 9; j++)
-			{
-				printf("%c",save[i][j]);
-			}
-		printf("\n");
-	}
-*/
+
+
+
+
+	//}
+
+	//
+	//
+
 	printf("\n");
 	/*printf("%f\n", time);*/
 	system("pause");
