@@ -19,7 +19,7 @@ int p=0;//类似于指针
 char save[12][25];
 int visit[3][10][10] = { 0 };//记录是否填写
 int judge[3][10][10] = { 0 };
-
+char aa[300000000];
 class sodoku
 {
 public:
@@ -27,31 +27,41 @@ public:
 	char st[50];
 	void createsodoku(int n);
 	void solvesodoku(int i, int j);
-	void choosecors(char a[], char b[]);
-	int testtest(char a[], char b[]);
+	int choosecors(char a[], char b[]);
+	int testtest1(char a[], char b[]);
 	void setsodoku(char a[], char b[])
 	{
 		strcpy(this->cs, a);
 		strcpy(this->st, b);
 	}
 };
-int sodoku::testtest(char a[],char b[])
+int sodoku::testtest1(char a[],char b[])
 {
+	choosecors(a, b);
+	char aaa[300] = { "6 1 2 3 4 5 7 9 8\n"
+		"3 4 5 9 7 8 6 1 2\n"
+		"9 7 8 6 1 2 3 4 5\n"
+		"1 8 3 4 2 9 5 7 6\n"
+		"4 5 9 7 8 6 1 2 3\n"
+		"7 2 6 1 5 3 4 8 9\n"
+		"2 3 4 5 9 7 8 6 1\n"
+		"5 9 7 8 6 1 2 3 4\n"
+		"8 6 1 2 3 4 9 5 7\n\n"
+	};
+	printf("%s", aaa);
+	if (strcmp(aaa, print) == 0)
+		return 1;
 	
-
-
-
-
-
 }
 void sodoku::createsodoku(int n)
 
 {
 	FILE* create_outputfile;
-	create_outputfile = fopen("sudoku.txt", "w");
+	create_outputfile = fopen("sodoku.txt", "w");
 	if (!create_outputfile)
 	{
-		printf("CANNOT open the output file!\n");
+		printf("CANNOT open the sodoku.txt!\n");
+		
 		exit(1);
 	}
 	int shift[9] = { 0,3,6,1,4,7,2,5,8 };
@@ -91,6 +101,7 @@ void sodoku::createsodoku(int n)
 						
 					}
 					n--;
+					if (n!=0)
 					print[p++] = '\n';
 					//fputc('\n', create_outputfile);
 				
@@ -101,6 +112,7 @@ void sodoku::createsodoku(int n)
 			}
 		}
 	}
+
 	fputs(print, create_outputfile);
 	fclose(create_outputfile);
 }
@@ -167,14 +179,22 @@ void sodoku::solvesodoku(int i, int j)
 
 }
 
-void sodoku::choosecors(char a[], char b[])
+int sodoku::choosecors(char a[], char b[])
 {
 
 	if (strcmp(a, "-c") == 0)
 	{
 		/*int n = atoi(argv[2]);*/
-		createsodoku(atoi(b));
+		int n = atoi(b);
+		if (n<=1000000 && n>0)
+		createsodoku(n);
+		else {
+			printf("-c后面的参数必须是1到1000000的整数");
+			return 1;
+		}
+
 		printf("\n%d\n", sum);
+		return 6;
 
 	}
 	else if (strcmp(a, "-s") == 0)
@@ -182,11 +202,17 @@ void sodoku::choosecors(char a[], char b[])
 
 		FILE *fp2 = fopen(b, "r");
 		memset(save, 0, sizeof(save));
-
+		if (!fp2)
+		{
+			printf("CANNOT open the file that you input!\n");
+			return 2;
+			exit(1);
+		}
 		char temp[25];
 
 		int num = 0;
 		//int i = 0;
+		int firstsodoku = 1;
 		while (!feof(fp2)) {
 			fgets(temp, 22, fp2);
 			if (strcmp(temp, "\n") == 0)
@@ -195,7 +221,7 @@ void sodoku::choosecors(char a[], char b[])
 			num++;
 			if (num == 9) {
 				num = 0;
-
+				
 				/*for (int i=0; i<9 ;i++)
 				printf("%s", save[i]);*/
 				//save数组已经装下一个数独，开始求解
@@ -219,27 +245,64 @@ void sodoku::choosecors(char a[], char b[])
 
 				solvesodoku(0, 0);
 
+				/*if (firstsodoku == 0) 
+				{
+					char tempp[] = { "\n" };
+					strcat(print, tempp);
+				}
+				
+				if (firstsodoku == 1)
+					firstsodoku = 0;*/
+
+				//char aaa[300] = { "6 1 2 3 4 5 7 9 8\n"
+				//	"3 4 5 9 7 8 6 1 2\n"
+				//	"9 7 8 6 1 2 3 4 5\n"
+				//	"1 8 3 4 2 9 5 7 6\n"
+				//	"4 5 9 7 8 6 1 2 3\n"
+				//	"7 2 6 1 5 3 4 8 9\n"
+				//	"2 3 4 5 9 7 8 6 1\n"
+				//	"5 9 7 8 6 1 2 3 4\n"
+				//	"8 6 1 2 3 4 9 5 7\n\n"
+				//};
+
+				//strcat(aa, aaa);
+				//printf("%s", aa);
+				//
 				save[9][0] = '\n';
 				save[9][1] = '\0';
 				for (int i = 0; i<10; i++)
 					strcat(print, save[i]);
+				printf("%s", print);
 
-				/*for (int i = 0; i<9; i++)
-				printf("%s", save[i]);
-				*/
+			/*if (strcmp(aaa, print) == 0)
+			   printf("heliangli");*/
+
+			/*	for (int i = 0; i<9; i++)
+				printf("%s", save[i]);*/
+				
 				/*printf("\n");*/
 				memset(save, 0, sizeof(save));
 				memset(visit, 0, sizeof(visit));
 			}
 
-
+			
 		}
 
+		/*printf("%s", print);*/
 		FILE* solve_outputfile;
-		solve_outputfile = fopen("sudoku.txt", "w");
+		solve_outputfile = fopen("sodoku.txt", "w");
+		if (!solve_outputfile)
+		{
+			printf("CANNOT open the sodoku.txt!\n");
+			exit(1);
+		}
 		fputs(print, solve_outputfile);
 		fclose(solve_outputfile);
-
+		return 6;
+	}
+	else {
+		return 3;
+		printf("第二个参数必须是-s或者-c");
 	}
 
 
