@@ -1,4 +1,4 @@
-// sodoku.cpp : Defines the entry point for the console application.
+// sudoku.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ char save[12][25];
 int visit[3][10][10] = { 0 };//记录是否填写
 int judge[3][10][10] = { 0 };
 char aa[300000000];
-class sodoku
+class sudoku
 {
 public:
 	char cs[2];
@@ -28,49 +28,34 @@ public:
 	void createsodoku(int n);
 	void solvesodoku(int i, int j);
 	int choosecors(char a[], char b[]);
-	int testtest1(char a[], char b[]);
+	/*int testtest1(char a[], char b[]);
+	int testtest2(char a[], char b[]);*/
 	void setsodoku(char a[], char b[])
 	{
 		strcpy(this->cs, a);
 		strcpy(this->st, b);
 	}
 };
-int sodoku::testtest1(char a[],char b[])
-{
-	choosecors(a, b);
-	char aaa[300] = { "6 1 2 3 4 5 7 9 8\n"
-		"3 4 5 9 7 8 6 1 2\n"
-		"9 7 8 6 1 2 3 4 5\n"
-		"1 8 3 4 2 9 5 7 6\n"
-		"4 5 9 7 8 6 1 2 3\n"
-		"7 2 6 1 5 3 4 8 9\n"
-		"2 3 4 5 9 7 8 6 1\n"
-		"5 9 7 8 6 1 2 3 4\n"
-		"8 6 1 2 3 4 9 5 7\n\n"
-	};
-	printf("%s", aaa);
-	if (strcmp(aaa, print) == 0)
-		return 1;
-	
-}
-void sodoku::createsodoku(int n)
+
+
+void sudoku::createsodoku(int n)
 
 {
 	FILE* create_outputfile;
-	create_outputfile = fopen("sodoku.txt", "w");
+	create_outputfile = fopen("sudoku.txt", "w");
 	if (!create_outputfile)
 	{
-		printf("CANNOT open the sodoku.txt!\n");
+		printf("CANNOT open the sudoku.txt!\n");
 		
 		exit(1);
 	}
 	int shift[9] = { 0,3,6,1,4,7,2,5,8 };
 	char num[10] = "612345789";
-	for(int i = 0; i < 2 && n; i++) 
+	/*for(int i = 0; i < 2 && n; i++) 
 	{
 		
 		if (i)
-			next_permutation(shift + 1, shift + 3);
+			next_permutation(shift + 1, shift + 3);*/
 		for (int j = 0; j < 6 && n; j++) 
 		{
 			if (j)
@@ -111,14 +96,14 @@ void sodoku::createsodoku(int n)
 
 			}
 		}
-	}
+	//}
 
 	fputs(print, create_outputfile);
 	fclose(create_outputfile);
 }
 
 
-void sodoku::solvesodoku(int i, int j)
+void sudoku::solvesodoku(int i, int j)
 {
 	if (findans == 1)
 		return;
@@ -129,9 +114,9 @@ void sodoku::solvesodoku(int i, int j)
 			i++;
 			j = 0;
 		}
-		if (i == 8 && j==16) {
-			findans = 1;
-			
+		if (i == 9) {
+			findans = 1;	
+			return;
 		}
 
 	}	
@@ -141,11 +126,10 @@ void sodoku::solvesodoku(int i, int j)
 		bool flag = 0;
 		for (int k = 1; k <= 9; k++)
 		{
-	
-			
+				
 			if (visit[0][i / 3 * 3 + j / 6][k] == 0 && visit[1][i][k] == 0 && visit[2][j / 2][k] == 0) 
 			{
-				save[i][j] = k+'0';//整型变成char 不知道会不会有问题
+				save[i][j] = k+'0';
 
 				visit[0][i / 3 * 3 + j / 6][k] = 1;
 				visit[1][i][k] = 1;
@@ -179,7 +163,7 @@ void sodoku::solvesodoku(int i, int j)
 
 }
 
-int sodoku::choosecors(char a[], char b[])
+int sudoku::choosecors(char a[], char b[])
 {
 
 	if (strcmp(a, "-c") == 0)
@@ -189,7 +173,7 @@ int sodoku::choosecors(char a[], char b[])
 		if (n<=1000000 && n>0)
 		createsodoku(n);
 		else {
-			printf("-c后面的参数必须是1到1000000的整数");
+			printf("-c后面的参数必须是1到1000000的整数\n");
 			return 1;
 		}
 
@@ -199,7 +183,7 @@ int sodoku::choosecors(char a[], char b[])
 	}
 	else if (strcmp(a, "-s") == 0)
 	{
-
+		memset(print, 0, sizeof(print));
 		FILE *fp2 = fopen(b, "r");
 		memset(save, 0, sizeof(save));
 		if (!fp2)
@@ -207,6 +191,7 @@ int sodoku::choosecors(char a[], char b[])
 			printf("CANNOT open the file that you input!\n");
 			return 2;
 			exit(1);
+
 		}
 		char temp[25];
 
@@ -221,9 +206,7 @@ int sodoku::choosecors(char a[], char b[])
 			num++;
 			if (num == 9) {
 				num = 0;
-				
-				/*for (int i=0; i<9 ;i++)
-				printf("%s", save[i]);*/
+
 				//save数组已经装下一个数独，开始求解
 
 				/*printf("\n");*/
@@ -245,42 +228,19 @@ int sodoku::choosecors(char a[], char b[])
 
 				solvesodoku(0, 0);
 
-				/*if (firstsodoku == 0) 
-				{
-					char tempp[] = { "\n" };
-					strcat(print, tempp);
+				if (firstsodoku == 0) {
+					char temm[] = "\n";
+					strcat(print, temm);
 				}
-				
-				if (firstsodoku == 1)
-					firstsodoku = 0;*/
 
-				//char aaa[300] = { "6 1 2 3 4 5 7 9 8\n"
-				//	"3 4 5 9 7 8 6 1 2\n"
-				//	"9 7 8 6 1 2 3 4 5\n"
-				//	"1 8 3 4 2 9 5 7 6\n"
-				//	"4 5 9 7 8 6 1 2 3\n"
-				//	"7 2 6 1 5 3 4 8 9\n"
-				//	"2 3 4 5 9 7 8 6 1\n"
-				//	"5 9 7 8 6 1 2 3 4\n"
-				//	"8 6 1 2 3 4 9 5 7\n\n"
-				//};
+				if (firstsodoku == 1) {
+					firstsodoku = 0;
+				}
+	
 
-				//strcat(aa, aaa);
-				//printf("%s", aa);
-				//
-				save[9][0] = '\n';
-				save[9][1] = '\0';
-				for (int i = 0; i<10; i++)
+				for (int i = 0; i<9; i++)
 					strcat(print, save[i]);
-				printf("%s", print);
-
-			/*if (strcmp(aaa, print) == 0)
-			   printf("heliangli");*/
-
-			/*	for (int i = 0; i<9; i++)
-				printf("%s", save[i]);*/
-				
-				/*printf("\n");*/
+			
 				memset(save, 0, sizeof(save));
 				memset(visit, 0, sizeof(visit));
 			}
@@ -288,109 +248,41 @@ int sodoku::choosecors(char a[], char b[])
 			
 		}
 
-		/*printf("%s", print);*/
+		fclose(fp2);
+		
+		printf("%s", print);
+		
 		FILE* solve_outputfile;
-		solve_outputfile = fopen("sodoku.txt", "w");
+		solve_outputfile = fopen("sudoku.txt", "w");
 		if (!solve_outputfile)
 		{
-			printf("CANNOT open the sodoku.txt!\n");
+			printf("CANNOT open the sudoku.txt!\n");
 			exit(1);
 		}
 		fputs(print, solve_outputfile);
 		fclose(solve_outputfile);
+		//printf("6");
 		return 6;
+		
+		
 	}
 	else {
+		
+		printf("第二个参数必须是-s或者-c\n");
 		return 3;
-		printf("第二个参数必须是-s或者-c");
 	}
-
-
-
-	
-
+	memset(print, 0, strlen(print));
 }
 int main(int argc,char*argv[])
 {
-	sodoku s1;
-	//s1.setsodoku(argv[1], argv[2]);
+	sudoku s1;
+
+	if (argc!=3)
+	printf("please input 3 arguments\n");
+	else 
 	s1.choosecors(argv[1], argv[2]);
-
-//
-//	if (strcmp(s1.cs, "-c") == 0) 
-//	{
-//		/*int n = atoi(argv[2]);*/
-//		s1.createsodoku(atoi(s1.st));		
-//		printf("\n%d\n", sum);
-//		
-//	}
-//	else if (strcmp(s1.cs, "-s") == 0)
-//	{
-//		
-//		FILE *fp2 = fopen(s1.st, "r");
-//		memset(save, 0, sizeof(save));
-//			
-//		char temp[25];
-//		
-//		int num = 0;
-//		//int i = 0;
-//		while (!feof(fp2)) {
-//		fgets(temp, 22, fp2);
-//		if (strcmp(temp, "\n") == 0)
-//			continue;
-//		strcat(save[num], temp);
-//		num++;
-//		if (num == 9) {
-//			num = 0;
-//			
-//			/*for (int i=0; i<9 ;i++)
-//			printf("%s", save[i]);*/
-//			//save数组已经装下一个数独，开始求解
-//			
-//			/*printf("\n");*/
-//			memset(visit, 0, sizeof(visit));
-//			/*初始化visit
-//			行列宫都从[109]*/
-//			//注意 每一行一个数字过后紧跟着空格 换算至没有空格时候的visit数组
-//			findans = 0;
-//			for (int i = 0; i < 9; i++)
-//				for(int j = 0; j < 17; j++)
-//			{
-//					if (save[i][j] != '0'&& save[i][j]!=' ') 
-//					{
-//						visit[0][i / 3 * 3 + j / 6][save[i][j]-'0'] = 1;
-//						visit[1][i][save[i][j] - '0'] = 1;
-//						visit[2][j / 2][save[i][j] - '0'] = 1;
-//					}
-//			}
-//
-//			s1.solvesodoku(0, 0);
-//
-//			save[9][0]= '\n';
-//			save[9][1] = '\0';
-//			for (int i = 0; i<10; i++)
-//			strcat(print,save[i]);
-//
-//			/*for (int i = 0; i<9; i++)
-//				printf("%s", save[i]);
-//*/
-//			/*printf("\n");*/
-//			memset(save, 0, sizeof(save));
-//			memset(visit, 0, sizeof(visit));
-//		}
-//		
-//
-//		}
-//
-//		FILE* solve_outputfile;
-//		solve_outputfile = fopen("sudoku.txt", "w");
-//		fputs(print, solve_outputfile);
-//		fclose(solve_outputfile);
-//		
-//	}
-
-	//printf("\n");
-	/*printf("%f\n", time);*/
+		
+	
 	system("pause");
 	return 0;
 
