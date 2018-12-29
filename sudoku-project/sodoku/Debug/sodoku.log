@@ -1,0 +1,18 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (sodoku.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  sudoku.cpp
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(43): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(199): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(217): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: see declaration of 'strcat'
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(238): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: see declaration of 'strcat'
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(247): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(90): note: see declaration of 'strcat'
+c:\users\41497\documents\visual studio 2015\projects\sodoku\sodoku\sudoku.cpp(261): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/PROFILE' specification
+sudoku.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+  sodoku.vcxproj -> C:\Users\41497\documents\visual studio 2015\Projects\sodoku\Debug\sudoku.exe
+  sodoku.vcxproj -> C:\Users\41497\documents\visual studio 2015\Projects\sodoku\Debug\sudoku.pdb (Full PDB)
