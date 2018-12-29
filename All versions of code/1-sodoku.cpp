@@ -3,17 +3,16 @@
 
 #include "stdafx.h"
 #include <cstdlib>
-//#include <iostream>
 #include <algorithm>
-//#include <fstream> 
 #include <ctime>
+#include <fstream>
 #include <string.h>
 
 
 using namespace std;
 int sum = 0;
 int findans = 0;//是否找到最终解
-
+//ofstream create_outputfile("sudoku.txt");
 char print[300000000];//存入写入文件的数独，一起写入
 int p=0;//类似于指针
 char save[12][25];
@@ -28,14 +27,15 @@ public:
 	void createsodoku(int n);
 	void solvesodoku(int i, int j);
 	int choosecors(char a[], char b[]);
-	/*int testtest1(char a[], char b[]);
-	int testtest2(char a[], char b[]);*/
+	void preprocess();
+	
 	void setsodoku(char a[], char b[])
 	{
 		strcpy(this->cs, a);
 		strcpy(this->st, b);
 	}
 };
+
 
 
 void sudoku::createsodoku(int n)
@@ -49,54 +49,53 @@ void sudoku::createsodoku(int n)
 		
 		exit(1);
 	}
-	int shift[9] = { 0,3,6,1,4,7,2,5,8 };
+	//char shift[] = "036147258" ;
+	//int shift[9] = { 0,3,6,1,4,7,2,5,8 };
 	char num[10] = "612345789";
-	/*for(int i = 0; i < 2 && n; i++) 
-	{
-		
-		if (i)
-			next_permutation(shift + 1, shift + 3);*/
-		for (int j = 0; j < 6 && n; j++) 
-		{
+	
+
+	char change[72][10] = {
+		{ "036147258" },{ "036174258" },{ "036417258" },{ "036471258" },{ "036741258" },{ "036714258" },
+		{ "036147285" },{ "036174285" },{ "036417285" },{ "036471285" },{ "036741285" },{ "036714285" },
+		{ "036147825" },{ "036174825" },{ "036417825" },{ "036471825" },{ "036741825" },{ "036714825" },
+		{ "036147852" },{ "036174852" },{ "036417852" },{ "036471852" },{ "036741852" },{ "036714852" },
+		{ "036147528" },{ "036174528" },{ "036417528" },{ "036471528" },{ "036741528" },{ "036714528" },
+		{ "036147582" },{ "036174582" },{ "036417582" },{ "036471582" },{ "036741582" },{ "036714582" },
+
+		{ "063147258" },{ "063174258" },{ "063417258" },{ "063471258" },{ "063741258" },{ "063714258" },
+		{ "063147285" },{ "063174285" },{ "063417285" },{ "063471285" },{ "063741285" },{ "063714285" },
+		{ "063147825" },{ "063174825" },{ "063417825" },{ "063471825" },{ "063741825" },{ "063714825" },
+		{ "063147852" },{ "063174852" },{ "063417852" },{ "063471852" },{ "063741852" },{ "063714852" },
+		{ "063147528" },{ "063174528" },{ "063417528" },{ "063471528" },{ "063741528" },{ "063714528" },
+		{ "063147582" },{ "063174582" },{ "063417582" },{ "063471582" },{ "063741582" },{ "063714582" }
+
+	};
+
+
+	for (int j = 0; j < 40320 && n; j++) {
 			if (j)
-				next_permutation(shift + 3, shift + 6);
-			for (int k = 0; k < 6 && n; k++)
+		 next_permutation(num + 1, num + 9);
+		for (int i = 0; i < 72 && n; i++) {	
+
+			for (int m = 0; m < 9; m++)
 			{
-				if (k)
-					next_permutation(shift + 6, shift + 9);
-				for (int l = 0; l < 40320 && n; l++)
+				for (int h = 0; h < 9; h++)
 				{
-					
-					if (l)
-						next_permutation(num + 1, num + 9);
-					for (int m = 0; m < 9; m++)
-					{
-						for (int h = 0; h < 9; h++)
-						{
-							print[p++] = num[(h + shift[m]) % 9];
-							if (h != 8)
-								print[p++] = ' ';
-							//fputc(num[(h + shift[m]) % 9], create_outputfile);
-							
-							/*if (h!=8)
-							fputc(' ', create_outputfile);*/
-						}
-						print[p++] = '\n';
-						//fputc('\n', create_outputfile);
-						
-					}
+					print[p++] = num[(h + (change[i][m]-'0')) % 9];
+					if (h != 8)
+				    print[p++] = ' ';
+				}
+				    print[p++] = '\n';
+
+			}
 					n--;
 					if (n!=0)
 					print[p++] = '\n';
-					//fputc('\n', create_outputfile);
-				
-					sum++;
-
-				}
-
-			}
 		}
-	//}
+	}
+	print[p] = '\0';
+
+	//create_outputfile << print;
 
 	fputs(print, create_outputfile);
 	fclose(create_outputfile);
@@ -162,6 +161,19 @@ void sudoku::solvesodoku(int i, int j)
 	//else solvesodoku(i, j);
 
 }
+void sudoku::preprocess()
+{
+	for (int i = 0; i < 9; i++)
+		for (int j = 0; j < 17; j++)
+		{
+			if (save[i][j] != '0'&& save[i][j] != ' ')
+			{
+				visit[0][i / 3 * 3 + j / 6][save[i][j] - '0'] = 1;
+				visit[1][i][save[i][j] - '0'] = 1;
+				visit[2][j / 2][save[i][j] - '0'] = 1;
+			}
+		}
+}
 
 int sudoku::choosecors(char a[], char b[])
 {
@@ -177,7 +189,7 @@ int sudoku::choosecors(char a[], char b[])
 			return 1;
 		}
 
-		printf("\n%d\n", sum);
+		//printf("\n%d\n", sum);
 		return 6;
 
 	}
@@ -215,16 +227,8 @@ int sudoku::choosecors(char a[], char b[])
 				行列宫都从[109]*/
 				//注意 每一行一个数字过后紧跟着空格 换算至没有空格时候的visit数组
 				findans = 0;
-				for (int i = 0; i < 9; i++)
-					for (int j = 0; j < 17; j++)
-					{
-						if (save[i][j] != '0'&& save[i][j] != ' ')
-						{
-							visit[0][i / 3 * 3 + j / 6][save[i][j] - '0'] = 1;
-							visit[1][i][save[i][j] - '0'] = 1;
-							visit[2][j / 2][save[i][j] - '0'] = 1;
-						}
-					}
+
+				preprocess();
 
 				solvesodoku(0, 0);
 
@@ -250,7 +254,7 @@ int sudoku::choosecors(char a[], char b[])
 
 		fclose(fp2);
 		
-		printf("%s", print);
+	/*	printf("%s", print);*/
 		
 		FILE* solve_outputfile;
 		solve_outputfile = fopen("sudoku.txt", "w");
@@ -276,13 +280,17 @@ int sudoku::choosecors(char a[], char b[])
 int main(int argc,char*argv[])
 {
 	sudoku s1;
-
+	clock_t starttime, endtime;
+	starttime = clock();
 	if (argc!=3)
 	printf("please input 3 arguments\n");
-	else 
-	s1.choosecors(argv[1], argv[2]);
+	else {
+		s1.choosecors(argv[1], argv[2]);
 		
+	}
 	
+	endtime = clock();
+	printf("程序运行的时间为%f\n", (double)(endtime - starttime)/CLOCKS_PER_SEC);
 	system("pause");
 	return 0;
 
