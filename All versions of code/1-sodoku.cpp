@@ -5,20 +5,19 @@
 #include <cstdlib>
 #include <algorithm>
 #include <ctime>
-#include <fstream>
+//#include <fstream>
 #include <string.h>
-
-
 using namespace std;
-int sum = 0;
+
+//int sum = 0;
 int findans = 0;//是否找到最终解
 //ofstream create_outputfile("sudoku.txt");
 char print[300000000];//存入写入文件的数独，一起写入
 int p=0;//类似于指针
 char save[12][25];
 int visit[3][10][10] = { 0 };//记录是否填写
-int judge[3][10][10] = { 0 };
-char aa[300000000];
+//int judge[3][10][10] = { 0 };
+//char aa[300000000];
 class sudoku
 {
 public:
@@ -26,14 +25,13 @@ public:
 	char st[50];
 	void createsodoku(int n);
 	void solvesodoku(int i, int j);
-	int choosecors(char a[], char b[]);
+	int  choosecors(char a[], char b[]);
 	void preprocess();
-	
-	void setsodoku(char a[], char b[])
+	/*void setsodoku(char a[], char b[])
 	{
 		strcpy(this->cs, a);
 		strcpy(this->st, b);
-	}
+	}*/
 };
 
 
@@ -91,14 +89,16 @@ void sudoku::createsodoku(int n)
 					n--;
 					if (n!=0)
 					print[p++] = '\n';
+					//sum++;
 		}
 	}
 	print[p] = '\0';
 
 	//create_outputfile << print;
-
+	
 	fputs(print, create_outputfile);
 	fclose(create_outputfile);
+	//printf("%d", sum);
 }
 
 
@@ -230,6 +230,7 @@ int sudoku::choosecors(char a[], char b[])
 
 				preprocess();
 
+
 				solvesodoku(0, 0);
 
 				if (firstsodoku == 0) {
@@ -246,7 +247,7 @@ int sudoku::choosecors(char a[], char b[])
 					strcat(print, save[i]);
 			
 				memset(save, 0, sizeof(save));
-				memset(visit, 0, sizeof(visit));
+				//memset(visit, 0, sizeof(visit));
 			}
 
 			
@@ -280,17 +281,16 @@ int sudoku::choosecors(char a[], char b[])
 int main(int argc,char*argv[])
 {
 	sudoku s1;
-	clock_t starttime, endtime;
-	starttime = clock();
+	/*clock_t starttime, endtime;
+	starttime = clock();*/
 	if (argc!=3)
 	printf("please input 3 arguments\n");
 	else {
 		s1.choosecors(argv[1], argv[2]);
 		
 	}
-	
-	endtime = clock();
-	printf("程序运行的时间为%f\n", (double)(endtime - starttime)/CLOCKS_PER_SEC);
+	/*endtime = clock();
+	printf("程序运行的时间为%f\n", (double)(endtime - starttime)/CLOCKS_PER_SEC);*/
 	system("pause");
 	return 0;
 
